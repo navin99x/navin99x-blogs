@@ -1,0 +1,59 @@
+{{ define "main" }}
+<section class="blog-list">
+    <div class="list-header">
+        <h1 class="page-title">Latest Posts</h1>
+        <div class="tag-dropdown">
+            <button class="tag-dropdown-btn" id="tagDropdownBtn">
+                <span>Search by Tag</span>
+                <svg width="12" height="12" viewBox="0 0 12 12" fill="currentColor">
+                    <path d="M2.5 4.5L6 8L9.5 4.5" stroke="currentColor" stroke-width="1.5" fill="none"/>
+                </svg>
+            </button>
+            <div class="tag-dropdown-menu" id="tagDropdownMenu">
+                <a href="{{ "/" | relURL }}" class="dropdown-tag active">All Posts</a>
+                {{ $tagCounts := slice }}
+                {{ range $name, $taxonomy := .Site.Taxonomies.tags }}
+                    {{ $tagCounts = $tagCounts | append (dict "name" $name "count" (len $taxonomy.Pages)) }}
+                {{ end }}
+                {{ $sortedTags := sort $tagCounts "count" "desc" }}
+                {{ range $sortedTags }}
+                <a href="{{ "/tags/" | relURL }}{{ .name | urlize }}/" class="dropdown-tag">#{{ .name }} <span class="tag-count">({{ .count }})</span></a>
+                {{ end }}
+            </div>
+        </div>
+    </div>
+    
+    {{ $posts := where .Site.RegularPages "Section" "posts" }}
+    {{ range $posts.ByDate.Reverse }}
+    <article class="post-card" data-post-id="{{ .File.UniqueID }}">
+        <div class="post-header" onclick="toggleSummary('{{ .File.UniqueID }}')">
+            <h2 class="post-title">{{ .Title }}</h2>
+            <div class="post-meta">
+                <time datetime="{{ .Date.Format "2006-01-02" }}">{{ .Date.Format "January 2, 2006" }}</time>
+                {{ if .Params.tags }}
+                <span class="post-tags">
+                    {{ range .Params.tags }}
+                    <a href="{{ "/tags/" | relURL }}{{ . | urlize }}/" class="tag" onclick="event.stopPropagation();">#{{ . }}</a>
+                    {{ end }}
+                </span>
+                {{ end }}
+            </div>
+        </div>
+        <div class="post-summary" id="summary-{{ .File.UniqueID }}">
+            <div class="summary-content">
+                {{ if .Params.summary }}
+                    {{ .Params.summary }}
+                {{ else }}
+                    {{ .Summary }}
+                {{ end }}
+            </div>
+            <a href="{{ .Permalink }}" class="read-more">Read More →</a>
+        </div>
+    </article>
+    {{ end }}
+    
+    {{ if eq (len $posts) 0 }}
+    <p class="no-posts">No posts yet. Check back soon!</p>
+    {{ end }}
+</section>
+{{ end }}
