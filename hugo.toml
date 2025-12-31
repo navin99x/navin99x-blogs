@@ -1,0 +1,27 @@
+baseURL = "https://blog.nabinpoudel004.com.np/"
+languageCode = "en-us"
+title = "Navin's Blog"
+summaryLength = 10
+
+[taxonomies]
+  tag = "tags"
+
+[params]
+  author = "Nabin Poudel"
+  description = "Personal blog of Nabin Poudel"
+  portfolioURL = "https://nabinpoudel004.com.np"
+  githubURL = "https://github.com/navin99x"
+
+[markup]
+  [markup.highlight]
+    style = "monokai"
+    lineNos = false
+  [markup.goldmark]
+    [markup.goldmark.renderer]
+      unsafe = true
+
+[outputs]
+  home = ["HTML"]
+  section = ["HTML"]
+  taxonomy = ["HTML"]
+  term = ["HTML"]
