@@ -1,0 +1,37 @@
+{{ define "main" }}
+<section class="tag-page">
+    <h1 class="page-title">Posts tagged: #{{ .Title }}</h1>
+    
+    <div class="blog-list">
+        {{ range .Pages.ByDate.Reverse }}
+        <article class="post-card" data-post-id="{{ .File.UniqueID }}">
+            <div class="post-header" onclick="toggleSummary('{{ .File.UniqueID }}')">
+                <h2 class="post-title">{{ .Title }}</h2>
+                <div class="post-meta">
+                    <time datetime="{{ .Date.Format "2006-01-02" }}">{{ .Date.Format "January 2, 2006" }}</time>
+                    {{ if .Params.tags }}
+                    <span class="post-tags">
+                        {{ range .Params.tags }}
+                        <a href="{{ "/tags/" | relURL }}{{ . | urlize }}/" class="tag" onclick="event.stopPropagation();">#{{ . }}</a>
+                        {{ end }}
+                    </span>
+                    {{ end }}
+                </div>
+            </div>
+            <div class="post-summary" id="summary-{{ .File.UniqueID }}">
+                <div class="summary-content">
+                    {{ if .Params.summary }}
+                        {{ .Params.summary }}
+                    {{ else }}
+                        {{ .Summary }}
+                    {{ end }}
+                </div>
+                <a href="{{ .Permalink }}" class="read-more">Read More →</a>
+            </div>
+        </article>
+        {{ end }}
+    </div>
+    
+    <a href="{{ "/" | relURL }}" class="back-link">← Back to all posts</a>
+</section>
+{{ end }}
