@@ -3,8 +3,9 @@
     <h1 class="page-title">{{ .Title }}</h1>
     
     {{ range .Pages.ByDate.Reverse }}
-    <article class="post-card" data-post-id="{{ .File.UniqueID }}">
-        <div class="post-header" onclick="toggleSummary('{{ .File.UniqueID }}')">
+    {{ $uniqueID := .RelPermalink | urlize }}
+    <article class="post-card" data-post-id="{{ $uniqueID }}">
+        <div class="post-header" onclick="toggleSummary('{{ $uniqueID }}')">
             <h2 class="post-title">{{ .Title }}</h2>
             <div class="post-meta">
                 <time datetime="{{ .Date.Format "2006-01-02" }}">{{ .Date.Format "January 2, 2006" }}</time>
@@ -17,7 +18,7 @@
                 {{ end }}
             </div>
         </div>
-        <div class="post-summary" id="summary-{{ .File.UniqueID }}">
+        <div class="post-summary" id="summary-{{ $uniqueID }}">
             <div class="summary-content">
                 {{ if .Params.summary }}
                     {{ .Params.summary }}
